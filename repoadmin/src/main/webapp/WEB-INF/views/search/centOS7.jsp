@@ -5,21 +5,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../include/header.jsp"%>
 <% 
-	String select_name = (String)request.getAttribute("select_name");
-	String pack_name = (String)request.getAttribute("pack_name");
-	String repo_name = (String)request.getAttribute("repo_name");
 	String repo_name = (String)request.getAttribute("repo_name"); 
 	String repo_idx = (String)request.getAttribute("repo_idx"); 
 	String c_date = (String)request.getAttribute("c_date");
 	String search_header_text = (String)request.getAttribute("search_header_text");
 	
-	
-	if(select_name== null){
-		select_name = "";
-	}
-	if(pack_name== null){
-		pack_name = "";
-	}
 	if(repo_idx== null){
 		repo_idx = "";
 	}
