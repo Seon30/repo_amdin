@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminWindowsPythonMapper">
+
+	<select id='getPythonDetail1' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 1
+	</select>
+
+	<select id='getPythonDetail2' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 2
+	</select>
+
+	<select id='getPythonDetail3' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 3
+	</select>
+
+	<select id='getPythonDetail4' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 4
+	</select>
+
+	<select id='getPythonDetail5' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 5
+	</select>
+
+	<select id='getPythonDetail6' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 6
+	</select>
+	
+	<select id='getPythonDetail7' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 7
+	</select>
+
+	<select id='getPythonDetail8' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 8
+	</select>				
+
+	<select id='getPythonDetail9' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 9
+	</select>
+
+	<select id='getPythonDetail10' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 10
+	</select>
+
+	<select id='getPythonDetail11' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 11
+	</select>
+
+	<select id='getPythonDetail12' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 12
+	</select>
+
+	<select id='getPythonDetail13' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminWindowsPython">
+		SELECT 	
+				python_idx
+				, python_ver_idx
+				, file_version
+				, real_path
+				, file_real_name
+				, operating_system
+				, description
+				, md5_sum
+				, CONCAT(ROUND(file_size/(1024*1024),2),"MB") AS file_size
+				, create_at
+				, c_emp_no
+				, update_at
+				, u_emp_no
+		FROM 	
+				python_windows
+		WHERE 
+				python_ver_idx = 13
+	</select>
+
+</mapper>
+

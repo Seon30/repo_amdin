@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminFileDownLoadMapper">
+    
+    <select id='retrieveUserFileDown' parameterType="int"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+    	select 
+   				file_full_name
+   				,file_name
+		from 	rm_user_file
+    	where 	user_file_idx = #{file_idx}
+    </select>	
+     <select id='retrieveFileDown' parameterType="int"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+    	select 
+   				real_path as file_full_name
+   				,filename as file_name
+		from 	repo_files
+    	where 	file_idx = #{file_idx}
+    </select>	
+   	<insert id="insertDownHis" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminDown">
+		insert into rm_file_down
+		        (
+		        	repo_idx
+		        	, file_idx
+		        	, down_ip
+		        	, down_prog_id
+		        	, c_emp_no
+		       )values(
+		       	#{repo_idx}
+		       	, #{file_idx}
+		        , #{down_ip}
+		        , #{down_prog_id}
+		        , #{c_emp_no}
+		       )
+    </insert>
+</mapper>
+

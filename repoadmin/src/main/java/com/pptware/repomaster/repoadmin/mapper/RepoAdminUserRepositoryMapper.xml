@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminUserRepositoryMapper">
+ 
+ 	<select id='retrieveUserRepo' parameterType="string"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+   		select 
+   			user_repo_idx
+   			,user_repo_name
+   			,user_repo_path
+	    from 
+	    	rm_user_repository
+	    where c_emp_no = #{emp_no}
+	    order by u_date desc
+    </select> 
+    
+    <select id='retrieveUserPackList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserPackage">
+   		select 
+   			user_pack_idx
+   			,user_pack_name
+   			,pack_full_path
+	    from 
+	    	rm_user_packages
+	    where c_emp_no = #{emp_no}
+	      and user_repo_idx = #{user_repo_idx}
+	    order by u_date desc
+    </select> 
+    
+    
+    <select id='retrieveUserFileList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserPackage">
+   		select 
+   			0 as user_repo_idx
+   			,user_file_idx
+   			,file_full_name
+   			,file_name
+   			,is_exclude
+   			,(CASE WHEN is_exclude = 'Y' THEN (
+												SELECT exclude_rsn
+												  FROM rm_file_exclude
+												 WHERE file_idx = user_file_idx) ELSE '' END) AS exclude_rsn
+	    from 
+	    	rm_user_file
+	    where c_emp_no = #{emp_no}
+	      and user_pack_idx = #{user_pack_idx}
+	    order by u_date desc
+    </select> 
+ 
+ 	<select id='getUserRepoConfList' parameterType="string"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+   		SELECT 
+   			conf_idx, conf_name, conf_desc, conf_body, c_date, c_emp_no, u_date, u_emp_no 
+		FROM 
+			rm_conf 
+		WHERE 
+			conf_idx IN
+		  <foreach item="item" index="index" collection="arr"
+		      open="(" separator="," close=")">
+		        #{item}
+		  </foreach>
+    </select> 
+    
+    
+    <update id="updateConf" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+     UPDATE
+     	rm_conf
+     SET 
+     	conf_name = #{conf_name},
+     	conf_desc = #{conf_desc},
+     	conf_body = #{conf_body}
+     WHERE
+     	conf_idx = #{conf_idx}
+    </update>
+    
+  	<select id='retrieveUserFile' parameterType="int" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		SELECT
+		 			a.user_file_idx
+					,b.user_pack_idx  
+		 			,b.user_repo_idx
+		 			,b.user_pack_name
+		 			,a.file_name
+		 			,a.file_full_name
+		 			,a.is_exclude
+		 			,(CASE WHEN is_exclude = 'Y' THEN (
+														SELECT exclude_rsn
+														  FROM rm_file_exclude
+														 WHERE file_idx = user_file_idx) ELSE '' END) AS exclude_rsn
+		
+		FROM 
+			 		rm_user_file a, rm_user_packages b
+		WHERE 
+					user_file_idx = #{user_file_idx}			
+    </select> 
+ 
+   <select id='retrieveUserRepoCnt' parameterType="string"  resultType="int">
+   		select count(*) as user_repo_cnt
+	      from rm_user_repository
+	     where c_emp_no = #{c_emp_no}
+	       and user_repo_path = #{c_repo}
+    </select> 
+    
+     <select id='retrieveUserRepoRootPath' resultType="string">
+   		select repo_root_path
+	      from rm_repository
+	     where repo_idx = 0
+    </select> 
+    
+    <insert id="insertUserRepo" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		insert into rm_user_repository(
+			user_repo_name
+			,user_repo_path
+			,c_emp_no
+			,u_emp_no
+		)values(
+			#{user_repo_name}
+			,#{user_repo_path}
+			,#{c_emp_no}
+			,#{c_emp_no} 
+		)
+	</insert>
+	
+	<insert id="insertUserPackData" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		insert into rm_user_packages(
+			user_repo_idx
+			,user_pack_name
+			,pack_full_path
+			,c_emp_no
+			,u_emp_no
+		) values (
+			#{user_repo_idx}
+			,#{user_pack_name}
+			,#{user_repo_path}
+			,#{c_emp_no}
+			,#{c_emp_no}
+		)
+	</insert>
+	
+	<select id='retrieveTargetUserRepo' parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+   		select
+   			user_repo_name
+   			,user_repo_path
+	    from 
+	    	rm_user_repository 
+	    where c_emp_no = #{c_emp_no}
+	    and user_repo_idx = #{user_repo_idx}
+    </select>
+    <select id='retrieveTargetUserPack' parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserPackage"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserPackage">
+   		select
+   			pack_full_path
+   			,user_repo_idx
+	    from 
+	    	rm_user_packages 
+	    where user_pack_idx = #{user_pack_idx}
+    </select>  
+    <select id='retrieveUserFileCnt' parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserPackage"  resultType="int">
+   		select count(*)
+	      from rm_user_file
+	     where file_full_name = #{file_full_name}
+    </select> 
+    <insert id="insertUserFileData" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserPackage">
+		insert into rm_user_file(
+			user_pack_idx
+			,file_name
+			,file_full_name
+			,file_size
+			,c_emp_no
+			,u_emp_no
+		)values(
+			#{user_pack_idx}
+			,#{file_name}
+			,#{file_full_name}
+			,#{file_size}
+			,#{c_emp_no}
+			,#{c_emp_no}
+		)
+	</insert>
+	<update id="updateUserFileData" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		update rm_user_file 
+		set
+			file_size = #{file_size}
+			,u_emp_no = #{c_emp_no}
+		where file_full_name = #{file_full_name}
+	</update>
+	
+    <update id="updateUserRepoData" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		update rm_user_repository 
+		set 
+			user_repo_file_cnt = ( select count(user_file_idx) from rm_user_file where user_repo_idx = #{user_repo_idx})
+			,user_repo_file_size = (select sum(file_size) from rm_user_file where user_repo_idx = #{user_repo_idx})
+			,u_emp_no = #{c_emp_no}
+		where user_repo_idx = #{user_repo_idx}
+	</update>
+	
+	<insert id="insertUserFileExclude" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminExcludeFile">
+		insert into rm_file_exclude(
+			file_idx
+			,c_emp_no
+			,u_emp_no
+			,exclude_rsn
+		)values(
+			#{file_idx}
+			,#{c_emp_no}
+			,#{c_emp_no}
+			,#{exclude_rsn}
+		)
+	</insert>
+	
+	<select id='retrieveFileFullName' parameterType="int"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		SELECT 
+				file_full_name
+		FROM 
+				rm_user_file
+		WHERE 
+				user_file_idx = #{user_file_idx}
+    </select>
+    
+	<select id='retrieveRepoFullName' parameterType="int"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		SELECT 
+				user_repo_name
+		FROM 
+				rm_user_repository
+		WHERE 
+				user_repo_idx = #{user_repo_idx}
+    </select>
+    
+	<select id='retrievePackFullName' parameterType="int"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+		SELECT 
+				user_pack_name
+		FROM 
+				rm_user_packages
+		WHERE 
+				user_pack_idx = #{user_pack_idx}
+    </select>        
+    
+    <delete id="deleteUserFileData" parameterType="int" >
+		DELETE
+		FROM 
+				rm_user_file
+		WHERE 
+				user_file_idx = #{user_file_idx}
+    </delete>
+    
+    <delete id="deleteUserPackData" parameterType="int" >
+		DELETE
+		FROM 
+				rm_user_packages
+		WHERE 
+				user_pack_idx = #{user_pack_idx}
+    </delete>
+
+    <delete id="deleteUserRepoData" parameterType="int" >
+		DELETE
+		FROM 
+				rm_user_repository
+		WHERE 
+				user_repo_idx = #{user_repo_idx}
+    </delete>        
+
+    <delete id="deleteUserExcludeFileData" parameterType="int" >
+    	delete
+    	from rm_file_exclude
+    	where file_idx = #{file_idx}
+    </delete>
+    
+    <delete id="deleteRepoIdxFile" parameterType="int" >
+    	delete
+    	from rm_user_file
+    	where user_repo_idx = #{repo_idx}
+    </delete>
+    
+       <delete id="deleteRepoIdx" parameterType="int" >
+    	delete
+    	from rm_user_repository
+    	where user_repo_idx = #{repo_idx}
+    </delete>
+    
+	<select id='repoIdxCntFile' parameterType="int"  resultType="int">
+   		select
+   			count(user_file_idx)
+	    from rm_user_file
+	    where user_repo_idx = #{repo_idx}
+    </select>
+    
+    <select id="getMainInformation" parameterType="string" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminMain">
+    select sum(repo_file_cnt) AS repo_file_cnt_sum, sum(repo_file_size)  / 1024 / 1024 / 1024 AS repo_file_size_sum from rm_repository where c_emp_no=#{admin} group by c_emp_no
+    </select>
+    <update id="updateisExcludeData" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepository">
+    	update rm_user_file set is_exclude = #{is_exclude} where user_file_idx = #{user_file_idx}
+    </update>
+    
+ 
+	
+</mapper>
+

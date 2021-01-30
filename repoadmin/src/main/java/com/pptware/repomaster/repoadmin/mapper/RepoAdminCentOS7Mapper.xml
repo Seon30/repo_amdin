@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminCentOS7Mapper">
+
+	<select id='getCentOS7osList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(SUBSTRING_INDEX(a.location_href, '/', -1)) AS package_name
+				, a.summary
+				, a.pkgkey
+		FROM 	repo_master.7_os_primary_packages a 
+	</select>
+
+    <select id='searchCentOS7osList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_os_primary_packages 
+   	    WHERE   
+   	    		7_os_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+
+  	</select>
+
+	
+	<select id='getCentOS7extrasList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(SUBSTRING_INDEX(a.location_href, '/', -1)) AS package_name
+				, a.summary
+				, a.pkgkey
+		FROM 	repo_master.7_extras_primary_packages a 
+	</select>
+
+    <select id='searchCentOS7extrasList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_extras_primary_packages 
+   	    WHERE   
+   	    		7_extras_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+
+  	</select>
+  	
+	<select id='getCentOS7plusList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(SUBSTRING_INDEX(a.location_href, '/', -1)) AS package_name
+				, a.summary
+				, a.pkgkey
+		FROM 	repo_master.7_centosplus_primary_packages a 
+	</select>
+
+    <select id='searchCentOS7plusList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_centosplus_primary_packages 
+   	    WHERE   
+   	    		7_centosplus_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+
+  	</select>
+	
+	<select id='getCentOS7updatesList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(SUBSTRING_INDEX(a.location_href, '/', -1)) AS package_name
+				, a.summary
+				, a.pkgkey
+		FROM 	repo_master.7_updates_primary_packages a 
+	</select>
+
+    <select id='searchCentOS7updatesList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_updates_primary_packages 
+   	    WHERE   
+   	    		7_updates_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+
+  	</select>
+
+
+<!-- description -->
+
+<!-- OS -->
+	<select id='getCentOS7osDesc1' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				concat(NAME," ",summary) AS desc1
+		FROM 	
+				7_os_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7osDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				pkgkey
+				, SUBSTRING_INDEX(location_href, '/', -1) AS package_file_name
+				, (name) AS Package_name 
+				, (VERSION) AS Package_version
+				, (`release`) AS Package_release
+				, (arch) AS Package_architecture
+				, SUBSTRING_INDEX(location_href, '.', -1) AS package_type
+				, (url) AS Homepage 				
+				, (rpm_license) AS License
+				, CONCAT(ROUND(size_package/(1024*1024),2),"MB") AS Download_size
+				, CONCAT(ROUND(size_installed/(1024*1024),2),"MB") AS Installed_size
+		FROM 	
+				7_os_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7osOnlyDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				description as onlydesc
+		FROM 	
+				7_os_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>	
+	
+	<select id='getCentOS7osRequires' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+               (CONCAT (CONCAT (CASE 
+                        WHEN flags = 'LT' THEN '&lt;'
+						WHEN flags = 'GT' THEN '&gt;'  
+						WHEN flags = 'LE' THEN '&lt;='
+						WHEN flags = 'GE' THEN '&gt;=' 
+                        ELSE '-' 
+                     END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_os_primary_requires 
+		WHERE  
+				pkgkey = #{pkgkey} 
+	</select>
+	
+	<select id='getCentOS7osProvides' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT (CASE 
+		                        WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;='
+		                        ELSE '-' 
+		                       END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_os_primary_provides 
+		WHERE  
+				pkgkey = #{pkgkey}		
+	</select>
+	
+	<select id='getCentOS7osConflicts' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE " "  
+		                       END)), "", ifnull(VERSION, "-"),"-", `release` ) )AS value 	
+		FROM 	
+				7_os_primary_conflicts
+		WHERE  	
+				pkgkey = #{pkgkey}
+	</select>
+
+	<select id='getCentOS7osObsoletes' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE '' 
+		                       END)), "", Ifnull(VERSION, "-"),"-", `release` )) AS value 	
+		FROM 	
+				7_os_primary_obsoletes
+		WHERE  	
+				pkgkey = #{pkgkey}	
+	</select>
+			
+
+	<select id='getCentOS7osFilePath' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(CONCAT(dirname, '/', filenames)) AS path
+		FROM 	
+				7_os_filelists_filelist
+		WHERE 	
+				pkgkey = #{pkgkey}
+	</select>	
+		
+
+	<select id='getCentOS7osChangelog' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(concat(FROM_UNIXTIME (a.date,'%Y-%m-%d')," "
+				, author , "\n "
+				, changelog, " " )) AS changelog
+		FROM 
+				7_os_other_changelog a
+		WHERE 
+				pkgkey = #{pkgkey}
+		ORDER BY 
+				date DESC
+	</select>		
+
+<!-- updates -->
+	<select id='getCentOS7updatesDesc1' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				concat(NAME," ",summary) AS desc1
+		FROM 	
+				7_updates_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7updatesDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				pkgkey
+				, SUBSTRING_INDEX(location_href, '/', -1) AS package_file_name
+				, (name) AS Package_name 
+				, (VERSION) AS Package_version
+				, (`release`) AS Package_release
+				, (arch) AS Package_architecture
+				, SUBSTRING_INDEX(location_href, '.', -1) AS package_type
+				, (url) AS Homepage 				
+				, (rpm_license) AS License
+				, CONCAT(ROUND(size_package/(1024*1024),2),"MB") AS Download_size
+				, CONCAT(ROUND(size_installed/(1024*1024),2),"MB") AS Installed_size
+		FROM 	
+				7_updates_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7updatesOnlyDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				description as onlydesc
+		FROM 	
+				7_updates_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>	
+	
+	<select id='getCentOS7updatesRequires' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+               (CONCAT (CONCAT (CASE 
+                        WHEN flags = 'LT' THEN '&lt;'
+						WHEN flags = 'GT' THEN '&gt;'  
+						WHEN flags = 'LE' THEN '&lt;='
+						WHEN flags = 'GE' THEN '&gt;=' 
+                        ELSE '-' 
+                     END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_updates_primary_requires 
+		WHERE  
+				pkgkey = #{pkgkey} 
+	</select>
+	
+	<select id='getCentOS7updatesProvides' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT (CASE 
+		                        WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;='
+		                        ELSE '-' 
+		                       END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_updates_primary_provides 
+		WHERE  
+				pkgkey = #{pkgkey}		
+	</select>
+	
+	<select id='getCentOS7updatesConflicts' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE " "  
+		                       END)), "", ifnull(VERSION, "-"),"-", `release` ) )AS value 	
+		FROM 	
+				7_updates_primary_conflicts
+		WHERE  	
+				pkgkey = #{pkgkey}
+	</select>
+
+	<select id='getCentOS7updatesObsoletes' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE '' 
+		                       END)), "", Ifnull(VERSION, "-"),"-", `release` )) AS value 	
+		FROM 	
+				7_updates_primary_obsoletes
+		WHERE  	
+				pkgkey = #{pkgkey}	
+	</select>
+			
+
+	<select id='getCentOS7updatesFilePath' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(CONCAT(dirname, '/', filenames)) AS path
+		FROM 	
+				7_updates_filelists_filelist
+		WHERE 	
+				pkgkey = #{pkgkey}
+	</select>	
+		
+
+	<select id='getCentOS7updatesChangelog' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(concat(FROM_UNIXTIME (a.date,'%Y-%m-%d')," "
+				, author , "\n "
+				, changelog, " " )) AS changelog
+		FROM 
+				7_updates_other_changelog a
+		WHERE 
+				pkgkey = #{pkgkey}
+		ORDER BY 
+				date DESC
+	</select>		
+
+<!-- extras -->
+	<select id='getCentOS7extrasDesc1' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				concat(NAME," ",summary) AS desc1
+		FROM 	
+				7_extras_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7extrasDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				pkgkey
+				, SUBSTRING_INDEX(location_href, '/', -1) AS package_file_name
+				, (name) AS Package_name 
+				, (VERSION) AS Package_version
+				, (`release`) AS Package_release
+				, (arch) AS Package_architecture
+				, SUBSTRING_INDEX(location_href, '.', -1) AS package_type
+				, (url) AS Homepage 				
+				, (rpm_license) AS License
+				, CONCAT(ROUND(size_package/(1024*1024),2),"MB") AS Download_size
+				, CONCAT(ROUND(size_installed/(1024*1024),2),"MB") AS Installed_size
+		FROM 	
+				7_extras_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7extrasOnlyDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				description as onlydesc
+		FROM 	
+				7_extras_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>	
+	
+	<select id='getCentOS7extrasRequires' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+               (CONCAT (CONCAT (CASE 
+                        WHEN flags = 'LT' THEN '&lt;'
+						WHEN flags = 'GT' THEN '&gt;'  
+						WHEN flags = 'LE' THEN '&lt;='
+						WHEN flags = 'GE' THEN '&gt;=' 
+                        ELSE '-' 
+                     END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_extras_primary_requires 
+		WHERE  
+				pkgkey = #{pkgkey} 
+	</select>
+	
+	<select id='getCentOS7extrasProvides' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT (CASE 
+		                        WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;='
+		                        ELSE '-' 
+		                       END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_extras_primary_provides 
+		WHERE  
+				pkgkey = #{pkgkey}		
+	</select>
+	
+	<select id='getCentOS7extrasConflicts' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE " "  
+		                       END)), "", ifnull(VERSION, "-"),"-", `release` ) )AS value 	
+		FROM 	
+				7_extras_primary_conflicts
+		WHERE  	
+				pkgkey = #{pkgkey}
+	</select>
+
+	<select id='getCentOS7extrasObsoletes' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE '' 
+		                       END)), "", Ifnull(VERSION, "-"),"-", `release` )) AS value 	
+		FROM 	
+				7_extras_primary_obsoletes
+		WHERE  	
+				pkgkey = #{pkgkey}	
+	</select>
+			
+
+	<select id='getCentOS7extrasFilePath' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(CONCAT(dirname, '/', filenames)) AS path
+		FROM 	
+				7_extras_filelists_filelist
+		WHERE 	
+				pkgkey = #{pkgkey}
+	</select>	
+		
+
+	<select id='getCentOS7extrasChangelog' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(concat(FROM_UNIXTIME (a.date,'%Y-%m-%d')," "
+				, author , "\n "
+				, changelog, " " )) AS changelog
+		FROM 
+				7_extras_other_changelog a
+		WHERE 
+				pkgkey = #{pkgkey}
+		ORDER BY 
+				date DESC
+	</select>		
+
+<!-- plus -->
+
+	<select id='getCentOS7plusDesc1' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				concat(NAME," ",summary) AS desc1
+		FROM 	
+				7_centosplus_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7plusDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				pkgkey
+				, SUBSTRING_INDEX(location_href, '/', -1) AS package_file_name
+				, (name) AS Package_name 
+				, (VERSION) AS Package_version
+				, (`release`) AS Package_release
+				, (arch) AS Package_architecture
+				, SUBSTRING_INDEX(location_href, '.', -1) AS package_type
+				, (url) AS Homepage 				
+				, (rpm_license) AS License
+				, CONCAT(ROUND(size_package/(1024*1024),2),"MB") AS Download_size
+				, CONCAT(ROUND(size_installed/(1024*1024),2),"MB") AS Installed_size
+		FROM 	
+				7_centosplus_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>
+	
+	<select id='getCentOS7plusOnlyDescription' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 	
+				description as onlydesc
+		FROM 	
+				7_centosplus_primary_packages
+		WHERE 
+				pkgkey = #{pkgkey}
+	</select>	
+	
+	<select id='getCentOS7plusRequires' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+               (CONCAT (CONCAT (CASE 
+                        WHEN flags = 'LT' THEN '&lt;'
+						WHEN flags = 'GT' THEN '&gt;'  
+						WHEN flags = 'LE' THEN '&lt;='
+						WHEN flags = 'GE' THEN '&gt;=' 
+                        ELSE '-' 
+                     END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_centosplus_primary_requires 
+		WHERE  
+				pkgkey = #{pkgkey} 
+	</select>
+	
+	<select id='getCentOS7plusProvides' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT (CASE 
+		                        WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;='
+		                        ELSE '-' 
+		                       END), "", Ifnull(version, "-"), `release` )) AS value 
+		FROM   
+				7_centosplus_primary_provides 
+		WHERE  
+				pkgkey = #{pkgkey}		
+	</select>
+	
+	<select id='getCentOS7plusConflicts' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE " "  
+		                       END)), "", ifnull(VERSION, "-"),"-", `release` ) )AS value 	
+		FROM 	
+				7_centosplus_primary_conflicts
+		WHERE  	
+				pkgkey = #{pkgkey}
+	</select>
+
+	<select id='getCentOS7plusObsoletes' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT name, 
+		       (CONCAT (CONCAT((CASE 
+								WHEN flags = 'LT' THEN '&lt;'
+								WHEN flags = 'GT' THEN '&gt;'  
+								WHEN flags = 'LE' THEN '&lt;='
+								WHEN flags = 'GE' THEN '&gt;=' 
+								ELSE '' 
+		                       END)), "", Ifnull(VERSION, "-"),"-", `release` )) AS value 	
+		FROM 	
+				7_centosplus_primary_obsoletes
+		WHERE  	
+				pkgkey = #{pkgkey}	
+	</select>
+			
+
+	<select id='getCentOS7plusFilePath' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(CONCAT(dirname, '/', filenames)) AS path
+		FROM 	
+				7_centosplus_filelists_filelist
+		WHERE 	
+				pkgkey = #{pkgkey}
+	</select>	
+		
+
+	<select id='getCentOS7plusChangelog' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT 
+				(concat(FROM_UNIXTIME (a.date,'%Y-%m-%d')," "
+				, author , "\n "
+				, changelog, " " )) AS changelog
+		FROM 
+				7_centosplus_other_changelog a
+		WHERE 
+				pkgkey = #{pkgkey}
+		ORDER BY 
+				date DESC
+	</select>
+	
+
+</mapper>
+

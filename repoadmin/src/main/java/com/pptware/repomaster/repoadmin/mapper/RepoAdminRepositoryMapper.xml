@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+ 
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminRepositoryMapper">
+ 
+    <select id='retrieveTotalCount' parameterType="string"  resultType="int">
+   		select ifnull(sum(repo_file_cnt),0)
+	      from rm_repository
+	     where repo_name = #{repo}
+    </select>    
+    
+    <select id='retrieveTotalSize' parameterType="string"  resultType="java.lang.Long">
+    	select ifnull(sum(repo_file_size), 0)
+    	  from rm_repository
+    	 where repo_name = #{repo}
+    </select>
+    
+    <select id='retrieveFileUpdateData' parameterType="map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+		SELECT 
+		 				a.filename
+						,a.real_path
+						,a.is_exclude
+						,a.file_size
+						,a.name
+						,a.repo_idx
+						,a.is_exclude NOT IN("Y") 
+		 FROM 			
+		 				repo_files a
+				 	 	,rm_repo_upld_his b
+		WHERE 			
+						b.repo_idx = #{repo}
+		  AND 			
+		  				b.c_date_e = #{c_date}
+		  AND 	
+		  				a.repo_idx = b.repo_idx	    
+    
+<!--     	select  -->
+<!--    				a.filename -->
+<!-- 				,a.file_full_name -->
+<!-- 				,a.file_path -->
+<!-- 				,a.hash_sha256 -->
+<!-- 				,a.hash_md5 -->
+<!-- 				,a.repo_idx -->
+<!-- 				,a.hash_blake2_256 -->
+<!-- 				,a.file_size -->
+<!-- 		from 	repo_files a -->
+<!--     	  		,rm_repo_upld_his b -->
+<!--     	where 	b.repo_idx = #{repo} -->
+<!--     	  and 	b.c_date_e = #{c_date} -->
+<!--     	  and 	date_format(a.c_date, '%Y-%m-%d')  -->
+<!--     	        between date_format(b.c_date_s, '%Y-%m-%d')  -->
+<!--     	  and   date_format(b.c_date_e, '%Y-%m-%d') -->
+<!--     	  and 	a.repo_idx = b.repo_idx -->
+    </select>
+    
+    <select id='retrieveFileSearchData' parameterType="map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+		SELECT	
+				repo_idx 
+		 		, (idx) AS file_idx	
+	 			, filename
+				, (real_path) AS file_path
+				, hash_method
+				, hash_value
+				, CONCAT(ROUND(file_size/1024,2),"MB") AS file_size
+				, is_exclude NOT IN("Y") 
+		FROM 	
+				repo_files a
+   LEFT OUTER
+		JOIN 
+				rm_file_exclude c ON a.idx = c.file_idx
+		where 	
+				a.repo_idx = #{repo_idx}
+   	 	  and   a.filename LIKE CONCAT(#{filename},'%')
+   	 	  and   a.is_exclude LIKE 'N'
+  </select>
+
+	<insert id="insertExclude" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminExcludeFile">
+		insert into rm_file_exclude
+		        (file_idx
+		        , c_emp_no
+		        , u_emp_no
+		        , exclude_rsn
+		        )
+		        values
+		        (#{exclude_idx}
+		        , #{c_emp_no}
+		        , #{u_emp_no}
+		        , #{exclude_rsn}
+		         )
+    </insert>
+    
+    
+    <update id="updateFileExcludeData" parameterType="int">
+		update repo_files
+		   set is_exclude = 'Y'
+		 where idx = #{file_idx}
+    </update>
+    
+    
+    <select id='excludeFileList' parameterType="map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+    	select 
+    		    a.file_idx
+    		   ,a.repo_idx	
+   			   ,a.file_name
+			   ,a.file_full_name
+			   ,a.file_path
+			   ,a.hash_sha256
+		       ,a.hash_md5
+			   ,a.hash_blake2_256
+			   ,a.file_size
+		from   repo_files a
+   left join   rm_file_exclude c
+		  on   a.file_idx = c.file_idx
+       WHERE   A.FILE_NAME = #{FILE_NAME}
+<!--     	 AND   C.C_DATE IS NULL -->
+    </select>	 
+    
+
+    <delete id="deleteExclude" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminExcludeFile" >
+    	delete 
+    	  from
+    	  			rm_file_exclude
+    	  where		file_idx = #{file_idx}
+	</delete>
+	
+    <update id="updateFileExcludeDataN" parameterType="int">
+		update repo_files
+		   set is_exclude = 'N'
+		 where idx = #{file_idx}
+    </update>
+    	
+	
+	 	
+	<select id='excludeFileSearchData' parameterType="map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+		SELECT 
+					a.exclude_idx
+					,a.exclude_rsn
+					,a.file_idx
+					,a.c_date
+					,a.c_emp_no
+					,a.u_date
+					,a.u_emp_no
+					,c.filename
+		 FROM 
+					rm_file_exclude a
+	LEFT JOIN 
+					repo_files c 
+		   ON 
+					a.file_idx = c.idx
+	 </select>	 	
+		
+<!-- 	<select id='excludeFileSearchData' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile"> -->
+<!--     	select  -->
+<!--     		    a.file_idx -->
+<!--     		   ,a.repo_idx	 -->
+<!--    			   ,a.file_name -->
+<!-- 			   ,a.file_full_name -->
+<!-- 			   ,a.file_path -->
+<!-- 			   ,a.hash_sha256 -->
+<!-- 		       ,a.hash_md5 -->
+<!-- 			   ,a.hash_blake2_256 -->
+<!-- 			   ,a.file_size -->
+<!-- 		from   rm_file a -->
+<!--    left join   rm_file_exclude c -->
+<!-- 		  on   a.file_idx = c.file_idx -->
+<!--        WHERE   a.file_idx = c.file_idx -->
+<!--     </select> -->
+    
+	<select id="confRepository" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+		select 
+			repo_idx
+			,repo_name
+ 			,repo_conf01_idx
+ 			,b.conf_name AS conf_01_nm
+ 			,repo_conf02_idx
+ 			,c.conf_name AS conf_02_nm 			
+ 			,repo_conf03_idx
+ 			,d.conf_name AS conf_03_nm 			
+ 			,repo_conf04_idx
+ 			,e.conf_name AS conf_04_nm 			
+ 			,repo_conf05_idx
+ 			,f.conf_name AS conf_05_nm 			
+ 		from rm_repository a
+		LEFT JOIN rm_conf b
+			ON a.repo_conf01_idx = b.conf_idx
+		LEFT JOIN rm_conf c
+			ON a.repo_conf02_idx = c.conf_idx
+		LEFT JOIN rm_conf d
+			ON a.repo_conf03_idx = d.conf_idx
+		LEFT JOIN rm_conf e
+			ON a.repo_conf04_idx = e.conf_idx
+		LEFT JOIN rm_conf f
+			ON a.repo_conf05_idx = f.conf_idx					
+ 		where repo_idx BETWEEN 1 and 2
+    </select>
+
+
+
+	<select id="confAll" parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+		select
+			conf_name
+   			,conf_desc
+   			,conf_body
+		FROM 
+			rm_conf 
+		WHERE 
+			conf_idx = #{conf_idx}
+	
+	</select>
+	
+	<select id="confName" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+		select
+			conf_idx
+			,conf_name
+		from
+			rm_conf
+	</select>
+	
+	<insert id="newInputConf" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+		insert into rm_conf
+			(conf_name
+			, conf_desc
+			, conf_body
+			, c_date
+			, c_emp_no
+			, u_date
+			, u_emp_no)
+			values 		
+			(#{conf_name}
+			,#{conf_desc}
+			,#{conf_body}
+			,#{c_date}
+			,#{c_emp_no}
+			,#{u_date}
+			,#{u_emp_no})
+	</insert>
+	
+	<update id="updateConf_repo" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+		UPDATE 
+			rm_repository
+		<set>
+		    <if test="repo_conf01_idx != null">repo_conf01_idx = #{repo_conf01_idx},</if>
+		   	<if test="repo_conf02_idx != null">repo_conf02_idx = #{repo_conf02_idx},</if>
+		   	<if test="repo_conf03_idx != null">repo_conf03_idx = #{repo_conf03_idx},</if>
+		   	<if test="repo_conf04_idx != null">repo_conf04_idx = #{repo_conf04_idx},</if>
+		    <if test="repo_conf05_idx != null">repo_conf05_idx = #{repo_conf05_idx},</if>
+		</set>
+     	WHERE
+     		repo_idx = #{repo_idx}
+	</update>
+	
+	
+	
+	<select id="downloadListSearch" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminDown">
+		select 
+    		    a.down_idx
+    		   ,a.file_idx	
+   			   ,a.down_ip
+			   ,a.down_prog_id
+			   ,a.c_date
+			   ,a.c_emp_no
+			   ,c.filename as filename
+			   ,d.repo_name as reponame
+		FROM	rm_file_down a, repo_files c, rm_repository d
+	   WHERE	a.file_idx = c.idx 
+		 AND	c.repo_idx = d.repo_idx
+		 order by a.c_date desc	
+	</select>
+	
+	
+	<select id='retrieveUserFileSearchData' parameterType="string"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminFile">
+		select 
+				  repo_idx 
+		 		, (user_repo_idx) AS repo_idx	
+	 			, (file_name) AS filename
+				, (real_path) AS file_path
+				, hash_method
+				, hash_value
+				, CONCAT(ROUND(file_size/1024,2),"MB") AS file_size
+				, is_exclude NOT IN("Y") 
+		from
+			rm_user_file
+		where file_name like = #{filename}
+		and	is_exclude = 'N'
+  </select>
+
+    <select id='searchConfName' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUserRepositoryConf">
+		SELECT	
+				conf_idx 
+	 			, conf_name
+				, conf_desc
+				, conf_body
+				, c_date
+				, c_emp_no
+				, u_date 
+				, u_emp_no
+		FROM 	
+				rm_conf 
+   	    WHERE   
+   	    		conf_name LIKE CONCAT('%',#{conf_name},'%')
+
+  </select>
+
+</mapper>
+

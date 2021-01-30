@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminUbuntuMapper">
+
+	<select id='versionList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		SELECT 
+				idx AS version_idx
+				,CONCAT(version_name," ",VERSION) AS version_name
+				,version
+		FROM 
+				ubuntu_version
+		WHERE 
+				version_name LIKE CONCAT('%','','%')
+		ORDER BY 
+				update_on 
+		ASC
+	</select>
+	
+	<select id='allPackageList' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		 SELECT 	VER.version
+		 			, PAC.idx
+					, VER.version_name
+					, CONCAT (PAC.package_name,' (',PAC.package_version,')',' [',PAC.section_idx_name,']') AS package_list
+					, PAC.idx 
+					,SUBSTRING_INDEX(PAC.package_desc,'\n',1) AS package_1row_desc
+		  FROM 		ubuntu_package PAC
+		  			, ubuntu_version VER
+		 WHERE 		VER.version = #{version}
+		   AND		PAC.version_idx = VER.idx
+	</select>
+
+	<select id='packageDesc' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		SELECT 	VER.version
+					, VER.version_name
+					, PAC.*
+		  FROM 	ubuntu_package PAC
+		  			, ubuntu_version VER
+		 WHERE 	PAC.idx = #{idx}
+		   AND	PAC.version_idx = VER.idx;
+	</select>
+	
+	<select id='sectionList' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		SELECT
+				idx AS section_idx
+				,version_idx
+				,section_name
+				,section_real_name
+				,section_p_name
+				,section_desc
+		FROM 
+				ubuntu_section
+		WHERE 
+				version_idx = #{version_idx}
+		ORDER BY 
+				update_on 
+		ASC
+	</select>
+</mapper>
+

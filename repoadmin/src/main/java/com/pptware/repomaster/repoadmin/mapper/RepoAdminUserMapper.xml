@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminUserMapper">
+
+ <!-- 회원가입  -->
+	<insert id="createUser" useGeneratedKeys="true" keyProperty="idx" parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		insert into rm_emp
+				(emp_no
+				, emp_pw
+				, emp_nm
+				, emp_email
+				, c_emp_no
+				, u_emp_no)
+				values 
+				(#{emp_no}
+				, AES_ENCRYPT(#{emp_pw},SHA2('pptware_repomaster',512))
+				, #{emp_nm}
+				, #{emp_email}
+				, #{c_emp_no}
+				, #{u_emp_no} )
+	</insert>
+
+	<select id="retrieveUserByIdx" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser" parameterType="int">
+		select 
+				emp_no
+				, CONVERT(AES_DECRYPT(emp_pw,SHA2('pptware_repomaster',512)) using utf8) emp_pw
+				, emp_nm
+				, emp_profile
+				, emp_email
+				, emp_lvl
+				, pw_req_yn
+				, c_date
+				, c_emp_no
+				, u_date
+				, u_emp_no
+		 from 	rm_emp
+		where 	emp_no = #{emp_no} 
+		  and 	emp_lvl > 0
+	</select>
+
+	<select id='retrieveUserById' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser" parameterType="string">
+		select 
+				emp_no
+				, CONVERT(AES_DECRYPT(emp_pw,SHA2('pptware_repomaster',512)) using utf8) emp_pw
+				, emp_nm
+				, emp_profile
+				, emp_email
+				, emp_lvl
+				, pw_req_yn
+				, c_date
+				, c_emp_no
+				, u_date
+				, u_emp_no
+		 from 	rm_emp
+		where 	emp_no = #{emp_no} 
+	</select>
+
+	<select id='retrieveUserByName' parameterType="string" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		select 
+				emp_no
+				, CONVERT(AES_DECRYPT(emp_pw,SHA2('pptware_repomaster',512)) using utf8) emp_pw
+				, emp_nm
+				, emp_profile
+				, emp_email
+				, emp_lvl
+				, pw_req_yn
+				, c_date
+				, c_emp_no
+				, u_date
+				, u_emp_no
+		 from 	rm_emp
+		where 	name like CONCAT('%',#{emp_nm},'%') 
+		  and 	emp_lvl > 0
+	</select>
+
+	<select id='retrieveUserByEmail' parameterType="string" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		select 
+				emp_no
+				, CONVERT(AES_DECRYPT(emp_pw,SHA2('pptware_repomaster',512)) using utf8) emp_pw
+				, emp_nm
+				, emp_profile
+				, emp_email
+				, emp_lvl
+				, pw_req_yn
+				, c_date
+				, c_emp_no
+				, u_date
+				, u_emp_no
+		 from 	rm_emp
+		where 	emp_email like CONCAT('%',#{emp_email},'%')
+		  and 	emp_lvl > 0
+	</select>
+
+	<select id='retrieveUserByLevel' parameterType="int" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		select 
+				emp_no
+				, CONVERT(AES_DECRYPT(emp_pw,SHA2('pptware_repomaster',512)) using utf8) emp_pw
+				, emp_nm
+				, emp_profile
+				, emp_email
+				, emp_lvl
+				, pw_req_yn
+				, c_date
+				, c_emp_no
+				, u_date
+				, u_emp_no
+		 from 	rm_emp
+		where 	emp_lvl = #{emp_lvl}
+		  and 	emp_lvl > 0
+	</select>
+
+	<select id='retrieveUserByLogin' parameterType="map"
+		resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		select 
+				emp_no
+				, CONVERT(AES_DECRYPT(emp_pw,SHA2('pptware_repomaster',512)) using utf8) emp_pw
+				, emp_nm
+				, emp_profile
+				, emp_email
+				, emp_lvl
+				, pw_req_yn
+				, c_date
+				, c_emp_no
+				, u_date
+				, u_emp_no
+		 from 	rm_emp
+		where 	emp_no = #{emp_no} 
+	</select>
+
+	<update id="updateUser">
+		update 	rm_emp
+		   set 	emp_no = #{emp_no}
+		   		,emp_pw = AES_ENCRYPT(#{emp_pw},SHA2('pptware_repomaster',512))
+		   		,emp_no = #{emp_nm}
+		   		,emp_email = #{emp_email}
+		   		,emp_lvl = #{emp_lvl}
+		   		,u_emp_no = #{u_emp_no}
+		where 	emp_no = #{emp_no}
+	</update>
+
+	<update id="updateUserEx">
+		update 	rm_emp
+		   set 	emp_pw = AES_ENCRYPT(#{emp_pw_new},SHA2('pptware_repomaster',512))
+		where	emp_no = ${emp_no} 	
+				emp_pw = AES_ENCRYPT(#{emp_pw_old},SHA2('pptware_repomaster',512))
+	</update>
+
+	<update id="deleteUserByIdx" parameterType="int">
+		update 	rm_emp
+		   set 	emp_lvl = 0
+		 where 	emp_no = #{emp_no}
+	</update>
+	
+	<select id='searchUserList' parameterType="map"
+		resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		SELECT 
+			 A.emp_no
+			,A.emp_pw
+			,A.emp_nm
+			,A.emp_profile
+			,A.emp_email
+			,A.emp_lvl
+			,(CASE 	WHEN A.pw_req_yn = "N" THEN "미신청" 
+					WHEN A.pw_req_yn = "R" THEN "R"
+					ELSE "변경완료" END ) AS pw_req_yn
+			,A.c_date
+			,A.u_date
+			,C.EMP_NM as c_emp_no
+			,U.EMP_NM as u_emp_no
+		FROM rm_emp A
+		LEFT OUTER JOIN RM_EMP C  ON A.C_EMP_NO = C.EMP_NO
+		LEFT OUTER JOIN RM_EMP U ON A.U_EMP_NO = U.EMP_NO  
+		<where>
+			<if test="searchType == 'emp_no'"> 
+				AND A.emp_no LIKE #{searchText}
+			</if>
+			<if test="searchType == 'emp_nm'"> 
+				AND A.emp_nm LIKE #{searchText}
+			</if>
+		</where>
+		Order by A.u_date desc
+	</select>
+	
+	<update id='updatUserList' parameterType="map">
+		UPDATE RM_EMP 
+		<set>
+			<if test="type == 'lvl'"> 
+				emp_lvl = #{value}
+			</if>
+			<if test="type == 'pw'"> 
+				emp_pw = AES_ENCRYPT(#{value},SHA2('pptware_repomaster',512))
+				,pw_req_yn = #{pw_req_yn}
+			</if>
+		</set>
+		WHERE EMP_NO = #{emp_no}
+	</update>
+	
+	<update id='updatMyInfo' parameterType="com.pptware.repomaster.repoadmin.domain.RepoAdminUser">
+		UPDATE 	RM_EMP 
+		   SET 	emp_pw =  AES_ENCRYPT(#{emp_pw},SHA2('pptware_repomaster',512))
+		   		, u_emp_no = #{u_emp_no}
+		 WHERE 	EMP_NO = #{emp_no}
+	</update>
+	<select id="idValidation" parameterType="map" resultType="string">
+		SELECT COUNT(emp_no) as CNT_NO
+		  FROM rm_emp
+		 WHERE emp_no = #{emp_no}
+	</select>
+	<select id='checkPwRest' parameterType="map"
+		resultType="int">
+		select 
+				count(*) as emp_count
+		 from 	rm_emp
+		where 	emp_no = #{emp_no} 
+		  and 	emp_email = #{emp_email}
+	</select>
+	
+	<update id='updatePwRest' parameterType="map">
+		update  rm_emp
+		   set  pw_req_yn = 'R' 	
+		where 	emp_no = #{emp_no} 
+		  and 	emp_email = #{emp_email}
+	</update>
+	
+	<update id='updatePwRest2' parameterType="map">
+		update  rm_emp
+		   set  pw_req_yn = 'N' 	
+		where 	emp_no = #{emp_no} 
+	</update>
+	
+	<update id='changePw' parameterType="map">
+		UPDATE 	rm_emp 
+		   SET 	emp_pw =  AES_ENCRYPT(#{emp_pw},SHA2('pptware_repomaster',512))
+		   		, u_emp_no = #{emp_no}
+		 WHERE 	emp_no = #{emp_no}
+	</update>
+	
+	<select id="chkPw" parameterType="map" resultType="int">
+		select  
+				count(*)
+		 from 	rm_emp
+		where 	emp_no = #{emp_no} 
+		  and 	emp_pw = AES_ENCRYPT(#{emp_pw},SHA2('pptware_repomaster',512))
+	</select>
+	
+	<select id="chkNo" parameterType="map" resultType="int">
+		select  
+				count(*)
+		 from 	rm_emp
+		where 	emp_no = #{emp_no}
+	</select>
+	
+	
+</mapper>
+

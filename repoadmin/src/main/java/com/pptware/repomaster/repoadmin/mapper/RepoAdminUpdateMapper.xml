@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminUpdateMapper">
+	<select id="mainTableSearch" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUpdateHis">
+
+		SELECT 
+					b.repo_name
+					, FORMAT(a.upld_file_cnt,0) AS upld_file_cnt
+					, DATE_FORMAT(a.c_date_s, '%Y-%m-%d') AS c_date_s
+					, CONCAT(FORMAT(ROUND(upld_file_size/(1024*1024),2),0),"MB") AS upld_file_size
+					, DATE_FORMAT(a.c_date_s, '%Y-%m-%d') AS c_date_view
+					, DATE_FORMAT(a.c_date_e, '%Y-%m-%d') AS c_date_e
+					,a.repo_idx
+		FROM 
+					rm_repo_upld_his a
+		LEFT JOIN 	
+					rm_repository b ON a.repo_idx = b.repo_idx
+		ORDER BY 	a.c_date_e DESC
+	</select>
+	
+	<select id="updateListSearch" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUpdateHis">
+		SELECT 
+					b.repo_name
+					, FORMAT(a.upld_file_cnt,0) AS upld_file_cnt
+					, CONCAT(FORMAT(ROUND(upld_file_size/(1024*1024),2),0),"MB") AS upld_file_size
+					, DATE_FORMAT(a.c_date_s, '%Y-%m-%d') AS c_date_s
+					, DATE_FORMAT(a.c_date_s, '%Y-%m-%d') AS c_date_e
+					,a.repo_idx
+					,c.emp_nm AS c_emp_no
+		FROM 
+					rm_repo_upld_his a
+		LEFT JOIN 
+					rm_repository b ON a.repo_idx = b.repo_idx
+		LEFT JOIN 
+					rm_emp c ON a.c_emp_no = c.emp_no
+		ORDER BY 
+					a.c_date_e DESC
+	</select>
+
+	 <update id="updatePythonRepoFiles">
+		update 	rm_repository
+		   set
+				repo_file_size =
+				(
+		select  sum(file_size)
+		  from  repo_files
+		 where  repo_idx = 1
+			    )
+			 ,  repo_file_cnt =
+			    (
+		select  count(*)
+		  from  repo_files
+		 where  repo_idx = 1
+			    )
+		 where  repo_idx = 1
+	</update>
+
+	 <update id="updateCentOSRepoFiles">
+		update 	rm_repository
+		   set
+			    repo_file_cnt =
+			    (
+			    	select sum(c)
+			    	  from 
+			    	  		(
+			    	  			select count(*) as c from centosplus_filelists_filelist
+			    	  			union
+			    	  			select count(*) as c from extras_filelists_filelist
+			    	  			union
+			    	  			select count(*) as c from os_filelists_filelist
+			    	  			union
+			    	  			select count(*) as c from updates_filelists_filelist
+			    	  		) a1
+			    )
+			    , repo_file_size =
+			    (
+			    	select sum(c)
+			    	  from 
+			    	  		(
+			    	  			select sum(size_package) as c from centosplus_primary_packages
+			    	  			union
+			    	  			select sum(size_package) as c from extras_primary_packages
+			    	  			union
+			    	  			select sum(size_package) as c from os_primary_packages
+			    	  			union
+			    	  			select sum(size_package) as c from updates_primary_packages
+			    	  		) a2
+			    ) 
+		 where  repo_idx = 2
+	</update>
+
+
+
+</mapper>
+
