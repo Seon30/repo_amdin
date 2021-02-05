@@ -54,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- description -->
 
 <!-- search -->
+
     <select id='searchCentOS8appstreamList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
 		SELECT	
 				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
@@ -62,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	
 				centos_8_stream_appstream_primary_packages 
    	    WHERE   
-   	    		centos_8_stream_appstream_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{filename},'%') 
   	</select>
 
     <select id='searchCentOS8baseosList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
@@ -73,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	
 				centos_8_stream_baseos_primary_packages 
    	    WHERE   
-   	    		centos_8_stream_baseos_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{filename},'%') 
   	</select>
   		
     <select id='searchCentOS8extrasList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
@@ -84,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	
 				centos_8_stream_extras_primary_packages 
    	    WHERE   
-   	    		centos_8_stream_extras_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{filename},'%') 
   	</select>
 	
     <select id='searchCentOS8plusList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
@@ -95,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	
 				centos_8_stream_plus_primary_packages 
    	    WHERE   
-   	    		centos_8_stream_plus_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{filename},'%') 
   	</select>
 	
 	<select id='searchCentOS8powertoolsList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
@@ -106,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	
 				centos_8_stream_powertools_primary_packages 
    	    WHERE   
-   	    		centos_8_stream_powertools_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{filename},'%') 
   	</select>	
 <!-- Search -->
 
@@ -227,7 +228,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, changelog, " " )) AS changelog
 		FROM 
 				centos_8_stream_appstream_other_changelog a
-		WHERE 
+		WHERE
 				pkgkey = #{pkgkey}
 		ORDER BY 
 				date DESC
@@ -718,11 +719,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, author , "\n "
 				, changelog, " " )) AS changelog
 		FROM 
-				centos_8_stream_plus_other_changelog a
+				repo_master.centos_8_stream_plus_primary_other_changelog a
 		WHERE 
 				pkgkey = #{pkgkey}
 		ORDER BY 
 				date DESC
 	</select>				
+	
 </mapper>
 

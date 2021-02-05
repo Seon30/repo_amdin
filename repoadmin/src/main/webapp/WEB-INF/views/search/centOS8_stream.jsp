@@ -7,7 +7,6 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-
 	<div id = "Progress_Loading" style="text-align: center; margin: 0 auto; position: absolute; left: 50%; top:50%; background: #F4F4F4"  ><!-- 로딩바 -->
 		<img src="/resources/dist/img/loading.gif"/>
 	</div>
@@ -23,7 +22,7 @@
                     	<li class="breadcrumb-item">
                         	<a href="/">Home</a>
                     	</li>
-                    	<li class="breadcrumb-item active">CentOS7</li>
+                    	<li class="breadcrumb-item active">CentOS8 Stream</li>
                 	</ol>
             	</div>
         	</div>
@@ -46,16 +45,16 @@
                                 	<div class="input-group input-group-lg mb-3">
  										<div class="input-group-prepend">              
 											<select type="button" id="searchVal" class="form-control custom-select-lg">
-			                                	<option value="appstream" selected="selected" >AppStream</option>
-			                               	 	<option value="baseos">BaseOS</option>
-			                               	 	<option value="plus">Plus</option>
-			                               	 	<option value="extras">Extras</option>	
-			                               	 	<option value="powertools">PowerTools</option>			 	
+			                                	<option id="appstream" value="appstream" selected="selected" >AppStream</option>
+			                               	 	<option id="baseos" value="baseos">BaseOS</option>
+			                               	 	<option id="plus" value="plus">Plus</option>
+			                               	 	<option id="extras" value="extras">Extras</option>	
+			                               	 	<option id="powertools" value="powertools">PowerTools</option>			 	
 											</select>		
 		                           		</div>
 		                                <input id="search_view_text" name="searchfiles" placeholder="파일 이름을 입력해 주세요." class="form-control">
 	                                    <span class="input-group-append">
-	                                        <button id="searchFile" type="button" class="btn btn-warning btn-flat" onclick="fileSearch()" >조회</button>
+	                                        <button id="searchFile" type="button" class="btn btn-warning btn-flat" onclick="fileSearch2()" >조회</button>
 	                                    </span>		                                
                                    	</div>
                                 </div>
@@ -116,20 +115,17 @@
 					</div>
 				</div>
 			</div>
+		</div>
     	</div>		
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-10" style="float: none; margin: 0 auto;">					
-					<div class="card card-primary">
-						<div class="card-header">
-<!-- 							<h3 class="card-title">CentOS <strong>7</strong></h3> -->
-						</div>
-						
+					<div class="card card-primary">	
 						<div class="card-body">
 							<div class="col-12">
 								<div class="card">
 									<div class="card-header d-flex p-0">
-										<h3 class="card-title p-3"><strong>CentOS Stream</strong></h3>
+										<h3 class="card-title p-3"><strong>CentOS8 Stream</strong></h3>
 										<ul class="nav nav-pills ml-auto p-1">
 											<li class="nav-item" id="8appstream"><a class="nav-link active" href="#OS" data-toggle="tab">AppStream</a></li>
 											<li class="nav-item" id="8baseos"><a class="nav-link" href="#OS" data-toggle="tab">BaseOS</a></li>

@@ -4,21 +4,7 @@
 <%@ page session="false"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../include/header.jsp"%>
-<% 
-	String version = (String)request.getAttribute("cent"); 
-	String version_name = (String)request.getAttribute("repo_idx"); 
-	String idx = (String)request.getAttribute("c_date");
 
-	if(version== null){
-		version = "";
-	}
-	if(version_name== null){
-		version_name = "";
-	}
-	if(idx == null){
-		idx = "";
-	}
-%>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
@@ -47,16 +33,51 @@
 				<div class="col-md-10" style="float: none; margin: 0 auto;">					
 					<div class="card card-primary">
 						<div class="card-header">
-							<h3 class="card-title">Ubuntu<strong>Package</strong></h3>
+							<h3 class="card-title">Ubuntu<strong>    Version</strong></h3>
 						</div>
 						<div class="card-body">
 							<div class="col-12">
-								<div class="card-body	">
-	                				<div id="showVersion"></div>
-				           			<form id="packList_form" method="post" action="goPackList" hidden="true">
-					                 	<input id="version" name="version"/>
-					                 	<input id="version_idx" name="version_idx"/>
-				               		</form>
+								<div class="card-body">
+                  					<div class="table-responsive">
+                    					<table class="table">
+                     	 					<tr>
+	                   							<th style="width:50%">
+	                    							<a href="focalPackList" class="nav-link">
+	                    							focal
+	                    							</a>
+	                   							</th>
+	                   							<td>
+	                    							<a href="focalPackList" class="nav-link">
+	                    							20.04 LTS
+	                    							</a>                        							
+	                   							</td>
+                      						</tr>
+                     	 					<tr>
+	                   							<th style="width:50%">
+	                    							<a href="" class="nav-link">
+	                    							groovy
+	                    							</a>
+	                   							</th>
+	                   							<td>
+	                    							<a href="" class="nav-link">
+	                    							20.10
+	                    							</a>                        							
+	                   							</td>
+                      						</tr>
+                     	 					<tr>
+	                   							<th style="width:50%">
+	                    							<a href="" class="nav-link">
+	                    							hirsute
+	                    							</a>
+	                   							</th>
+	                   							<td>
+	                    							<a href="" class="nav-link">
+	                    							20.04 LTS
+	                    							</a>                        							
+	                   							</td>
+                      						</tr>
+						                </table>
+						             </div>
 							    </div>
 							</div>
 						</div>							

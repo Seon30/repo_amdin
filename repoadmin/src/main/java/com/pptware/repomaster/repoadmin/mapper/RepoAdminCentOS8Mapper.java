@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages;
+import com.pptware.repomaster.repoadmin.domain.RepoAdminFile;
 
 
 @Repository("com.pptware.repomaster.repoadmin.mapper.RepoAdminCentOS8Mapper")
@@ -123,6 +124,4 @@ public interface RepoAdminCentOS8Mapper {
 	public List<RepoAdminCentOSPrimaryPackages> getCentOS8plusFilePath(String pkgkey) throws Exception;
 	
 	public List<RepoAdminCentOSPrimaryPackages> getCentOS8plusChangelog(String pkgkey) throws Exception;
-	
-
 }

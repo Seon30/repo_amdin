@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,20 +30,20 @@ public class RepoAdminUbuntuController {
 	@Resource(name = "com.pptware.repomaster.repoadmin.service.RepoAdminUbuntuService")
 	RepoAdminUbuntuService ubuntuService;
 	
+	@InitBinder
 	@ResponseBody
-	@RequestMapping(value = "/versionList", method = RequestMethod.POST)
-	public List<RepoAdminUbuntu> versionList(Model model, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "getFocalPackList", method = RequestMethod.POST)
+	public List<RepoAdminUbuntu> getFocalPackList(Model model, HttpServletRequest request, HttpServletResponse response) {
 		List<RepoAdminUbuntu> returnList = new ArrayList<RepoAdminUbuntu>();
 			try {
 				List<RepoAdminUbuntu> tempList = null;
-				tempList = ubuntuService.versionList();
+				tempList = ubuntuService.getFocalPackList();
 				RepoAdminUbuntu tempVo = null;
 				for(int i = 0 ; i< tempList.size() ; i++) {
 
 					tempVo = tempList.get(i);
 
-					returnList.add(i, tempVo);
-				System.out.println("■■■■■■■■■■■■■ Version_idx = ["+tempVo.getVersion_idx()+"]");
+					returnList.add(i, tempVo);;
 				}
 				
 			} catch (Exception e) {
@@ -51,84 +52,27 @@ public class RepoAdminUbuntuController {
 			}
 		return returnList;
 	}	
-	
-	@RequestMapping(value = "/goPackList", method = RequestMethod.POST, produces = "application/json")
-	private ModelAndView goPackList(String version) {
-		ModelAndView mav = new ModelAndView();
-		
-		mav.addObject("version",version);
-		mav.setViewName("ubuntu/ubuntuPackList");
-		try {
-			System.out.println("이건키++++++++++++"+version);
 
+	
+	
+	
+	
+	
+	@ResponseBody	
+	@RequestMapping(value = "/getFocalPackDesc", method = RequestMethod.POST, produces = "application/json")
+	public List<RepoAdminUbuntu> getFocalPackDesc(String pkgkey,String table_type, Model model, HttpServletRequest request, HttpServletResponse response) {
+		List<RepoAdminUbuntu> tempMap = null;
+		try {
+			tempMap = ubuntuService.getFocalPackDesc(pkgkey);
+			System.out.println("[getFocalPackDesc][pkgkey] >> " + pkgkey);
+			System.out.println("[getFocalPackDesc][table_type] >> " + table_type);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return mav;
-	}	
-	
-	
-	@ResponseBody
-	@RequestMapping(value = "/allPackageList", method = RequestMethod.POST)
-	public List<RepoAdminUbuntu> allPackageList(String version, Model model, HttpServletRequest request, HttpServletResponse response) {
-		List<RepoAdminUbuntu> returnList = new ArrayList<RepoAdminUbuntu>();
+		System.out.println("[getFocalPackDesc][returnMap] >> " + tempMap.toString());
+		return tempMap;
+	}
 
-			try {
-				List<RepoAdminUbuntu> tempList = null;
-				tempList = ubuntuService.allPackageList(version);
-				RepoAdminUbuntu tempVo = null;
-				for(int i = 0 ; i< tempList.size() ; i++) {
-
-					tempVo = tempList.get(i);
-
-					returnList.add(i, tempVo);
-
-					}
-			} catch (Exception e) {
-
-				e.printStackTrace();
-			}
-		return returnList;
-	}	
-	
-	@RequestMapping(value = "/goPackDesc", method = RequestMethod.POST, produces = "application/json")
-	private ModelAndView goPackDesc(String idx) {
-		ModelAndView mav = new ModelAndView();
-		
-		mav.addObject("idx",idx);
-		mav.setViewName("ubuntu/ubuntuPackDesc");
-		try {
-			System.out.println("이건키++++++++++++"+idx);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mav;
-	}	
-
-	@ResponseBody
-	@RequestMapping(value = "/packageDesc", method = RequestMethod.POST)
-	public List<RepoAdminUbuntu> packageDesc(String idx, Model model, HttpServletRequest request, HttpServletResponse response) {
-		List<RepoAdminUbuntu> returnList = new ArrayList<RepoAdminUbuntu>();
-	
-		System.out.println("idxidxidxidxidxidxidxidxidxidx="+idx);
-			try {
-				List<RepoAdminUbuntu> tempList = null;
-				tempList = ubuntuService.packageDesc(idx);
-				RepoAdminUbuntu tempVo = null;
-				for(int i = 0 ; i< tempList.size() ; i++) {
-
-					tempVo = tempList.get(i);
-
-					returnList.add(i, tempVo);
-
-					}
-			} catch (Exception e) {
-
-				e.printStackTrace();
-			}
-		return returnList;
-	}	
 
 	
 	private boolean checkSession(HttpServletRequest request) {

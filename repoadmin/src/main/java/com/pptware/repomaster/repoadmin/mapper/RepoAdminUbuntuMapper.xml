@@ -5,58 +5,70 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.pptware.repomaster.repoadmin.mapper.RepoAdminUbuntuMapper">
 
-	<select id='versionList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
-		SELECT 
-				idx AS version_idx
-				,CONCAT(version_name," ",VERSION) AS version_name
-				,version
+	<select id='getFocalPackList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		
+		SELECT
+				/*
+				idx
+			  	, Package AS package_name
+			  	, VERSION AS version
+			  	, Section AS section
+			  	, Architecture AS architecture
+			  	*/
+			  	*
 		FROM 
-				ubuntu_version
+				ubuntu_focal_main
 		WHERE 
-				version_name LIKE CONCAT('%','','%')
-		ORDER BY 
-				update_on 
-		ASC
-	</select>
-	
-	<select id='allPackageList' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
-		 SELECT 	VER.version
-		 			, PAC.idx
-					, VER.version_name
-					, CONCAT (PAC.package_name,' (',PAC.package_version,')',' [',PAC.section_idx_name,']') AS package_list
-					, PAC.idx 
-					,SUBSTRING_INDEX(PAC.package_desc,'\n',1) AS package_1row_desc
-		  FROM 		ubuntu_package PAC
-		  			, ubuntu_version VER
-		 WHERE 		VER.version = #{version}
-		   AND		PAC.version_idx = VER.idx
+				UbuntuVersion = "20.04"
+		AND		
+				UbuntuVersionName = "Focal"
+	 ORDER BY 
+				Package					
+		  ASC					
+
 	</select>
 
-	<select id='packageDesc' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
-		SELECT 	VER.version
-					, VER.version_name
-					, PAC.*
-		  FROM 	ubuntu_package PAC
-		  			, ubuntu_version VER
-		 WHERE 	PAC.idx = #{idx}
-		   AND	PAC.version_idx = VER.idx;
-	</select>
-	
-	<select id='sectionList' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+    <select id='searchFocalPackList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		
 		SELECT
-				idx AS section_idx
-				,version_idx
-				,section_name
-				,section_real_name
-				,section_p_name
-				,section_desc
+				/*
+				idx
+			  	, Package AS package_name
+			  	, VERSION AS version
+			  	, Section AS section
+			  	, Architecture AS architecture
+			  	*/
+			  	*
 		FROM 
-				ubuntu_section
+				ubuntu_focal_main
 		WHERE 
-				version_idx = #{version_idx}
-		ORDER BY 
-				update_on 
-		ASC
+				Package like CONCAT(#{rpm_sourcerpm},'%') 
+	 ORDER BY 
+				Package					
+		  ASC	
+  	</select>
+  	
+	<select id='getFocalPackDesc' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminUbuntu">
+		SELECT
+				 Package AS package_name
+				, Version
+				, Priority
+				, Section
+				, CONCAT(Round(InstalledSize/1024),'MB') AS InstalledSize
+				, CONCAT(Round(Size/1024),'MB') AS DownloadSize				
+				, Provides
+				, Depends
+				, Suggests		
+				, Filename
+				, Description	
+				, Recommends
+				, Enhances														
+		FROM 
+				ubuntu_focal_main
+		WHERE 
+				idx = #{idx} 
+				
 	</select>
+
 </mapper>
 

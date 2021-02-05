@@ -13,19 +13,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	repo_master.7_os_primary_packages a 
 	</select>
 
-    <select id='searchCentOS7osList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
-		SELECT	
-				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
-				, summary
-				, pkgkey
-		FROM 	
-				7_os_primary_packages 
-   	    WHERE   
-   	    		7_os_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
-
-  	</select>
-
-	
 	<select id='getCentOS7extrasList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
 		SELECT 
 				(SUBSTRING_INDEX(a.location_href, '/', -1)) AS package_name
@@ -33,18 +20,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, a.pkgkey
 		FROM 	repo_master.7_extras_primary_packages a 
 	</select>
-
-    <select id='searchCentOS7extrasList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
-		SELECT	
-				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
-				, summary
-				, pkgkey
-		FROM 	
-				7_extras_primary_packages 
-   	    WHERE   
-   	    		7_extras_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
-
-  	</select>
   	
 	<select id='getCentOS7plusList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
 		SELECT 
@@ -53,18 +28,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, a.pkgkey
 		FROM 	repo_master.7_centosplus_primary_packages a 
 	</select>
-
-    <select id='searchCentOS7plusList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
-		SELECT	
-				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
-				, summary
-				, pkgkey
-		FROM 	
-				7_centosplus_primary_packages 
-   	    WHERE   
-   	    		7_centosplus_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
-
-  	</select>
 	
 	<select id='getCentOS7updatesList' resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
 		SELECT 
@@ -74,6 +37,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	repo_master.7_updates_primary_packages a 
 	</select>
 
+<!-- description -->
+
+<!-- search -->
+    <select id='searchCentOS7osList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_os_primary_packages 
+   	    WHERE   
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{rpm_sourcerpm},'%') 
+  	</select>
+  	
+    <select id='searchCentOS7extrasList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_extras_primary_packages 
+   	    WHERE   
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{rpm_sourcerpm},'%') 
+
+  	</select>
+
+    <select id='searchCentOS7plusList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
+		SELECT	
+				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
+				, summary
+				, pkgkey
+		FROM 	
+				7_centosplus_primary_packages 
+   	    WHERE   
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{rpm_sourcerpm},'%') 
+
+  	</select>  	
+ 
+ 
     <select id='searchCentOS7updatesList' parameterType="Map"  resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">
 		SELECT	
 				(SUBSTRING_INDEX(location_href, '/', -1)) AS package_name
@@ -82,12 +84,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM 	
 				7_updates_primary_packages 
    	    WHERE   
-   	    		7_updates_primary_packages.rpm_sourcerpm like CONCAT(#{rpm_sourcerpm},'%') 
+   	    		(SUBSTRING_INDEX(location_href, '/', -1)) like CONCAT(#{rpm_sourcerpm},'%') 
 
-  	</select>
+  	</select> 	  	
+  	
+<!-- /search -->
 
-
-<!-- description -->
 
 <!-- OS -->
 	<select id='getCentOS7osDesc1' parameterType="String" resultType="com.pptware.repomaster.repoadmin.domain.RepoAdminCentOSPrimaryPackages">

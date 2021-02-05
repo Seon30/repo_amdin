@@ -1,19 +1,19 @@
 
 $(document).ready(function(){
-	centOS8desc.initPage();
+	centOS8desc.initPage();//4
 })
 
 var centOS8desc={
 	initPage:function(){
 		centOS8desc.defineEvent();	
 		centOS8desc.defineGrid();
-		centOS8desc.initData();
+		centOS8desc.initData();//5
 	},
 	defineGrid:function(){
 		
 	},
 	initData:function(){
-		getCent8desc();
+		getCent8desc();//6
 	},
 	defineEvent:function(){
 		
@@ -23,18 +23,15 @@ var centOS8desc={
 
 
 
-function getCent8desc(){
+function getCent8desc(){ //7
 	$.ajax({
-	    url: "getCentOS8Detail",
+	    url: "getCentOS8Detail",// << 일로 이동함
 	    type: "POST",                             
-	    data: {  
-					pkgkey:$("#pkgkey").val()
-					,table_type : $("#table_type").val()
+	    data: {pkgkey:$("#pkgkey").val()  // 넘겨받은 데이터 set
+			,table_type : $("#table_type").val()
 			    	},
 		dataType: "json",	    	
 	    success: function(data){
-	    	console.log("description >>> " + JSON.stringify(data.onlydesc));
-
 	    	cent8desc1Grid("cent8desc1Grid",data.desc1);
 	    	cent8descGrid("cent8descGrid",data.description);
 	    	cent8onlydescGrid("cent8onlydescGrid",data.onlydesc);

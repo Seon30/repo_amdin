@@ -2,30 +2,33 @@
 $(document).ready(function(){
 	centOS7.initPage();
 	oSClick();
-	searchBrowser.initPage();
+	centOS7.initPage();
 	$("#search_view_text").focus();
 	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
 })
+
 .ajaxStart(function(){
 $('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
-
-})
+	})
 
 .ajaxStop(function(){
 $('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+	});
 
-});
 var centOS7={
-	initPage:function(){
-		centOS7.defineEvent();	
-		centOS7.defineGrid();
-		centOS7.initData();
+	initPage:function(){	
+		centOS7.defineEvent();
+		if($('#search_header_text').val()!=""||$('#c_date').val()!=""){
+			centOS7.initData();			
+		}else{
+			centOS7.defineGrid();			
+		}
 	},
 	defineGrid:function(){
-		
+		//2. 그리드 함수 추가 ;
 	},
 	initData:function(){
-		
+//		fileSearch();
 	},
 	defineEvent:function(){
 		$('#7OS').on('click',function(e){
@@ -47,36 +50,6 @@ var centOS7={
 	},
 
 }
-var searchBrowser={
-		initPage:function(){	
-			searchBrowser.defineEvent();
-			if($('#search_header_text').val()!=""||$('#c_date').val()!=""){
-				searchBrowser.initData();			
-			}else{
-				searchBrowser.defineGrid();			
-			}
-		},
-		defineGrid:function(){
-			//2. 그리드 함수 추가 ;
-		},
-		initData:function(){
-			fileSearch();
-		},
-		defineEvent:function(){
-			//이벤트 정의
-			$("input[name=searchfiles]").keydown(function(key) {
-	            if (key.keyCode == 13) {
-	            	fileSearch();
-	            }
-	        });	
-			
-			$('#down_send').on('click',function(){
-				downloadFiles();
-			});
-			
-		},
-
-	}
 
 function showOS(key){
 	if($("#7OS")){
@@ -277,7 +250,7 @@ function makeGridUpdates(gridId,dataObj){
 	});
 }
 
-function fileSearch(){
+function fileSearch3(){
 	var filename = $('#search_view_text').val();
 
 	if($('#search_view_text').val().length==0){
@@ -289,13 +262,16 @@ function fileSearch(){
 		filename = $('#search_view_text').val();
 	}
 	var sendDate = {
-			file_idx:$('#file_idx').val(),
+			file_idx:$('#pack_idx').val(),
+			select_name:$('#searchVal').val(),
 			filename:$('#search_view_text').val(),
 		    c_date:$('#c_date').val(),
-		    repo_idx:$('#repo_idx').val()
+		    repo_idx:$('#searchVal').val()
 	}
+	console.log("filename >> " + $('#search_view_text').val());
+	console.log("select_name >> " + $('#search_view_text').val());
 	$.ajax({
-	    url: "fileSearch", 
+	    url: "fileSearch3", 
 	    
 	    data: sendDate,   
 	    
@@ -322,22 +298,21 @@ function makeGrid(gridId,dataObj){
         data: dataObj,
  	 
         fields: [
-        	
-            { headerTemplate: "파일이름" 	 ,align:"center"	, name: "filename"		,align:"left" 	, type: "text"		, width: 30 },
-            { headerTemplate: "파일경로" 	 ,align:"center"	, name: "file_path"	 	,align:"left" 	, type: "text"		, width: 70 },
-            { headerTemplate: "파일사이즈"  ,align:"center"	, name: "file_size"						,type: "number"		, width: 20 },
-            { headerTemplate: "다운로드"	 ,align:"center"    , name: "file_idx"		,align:"center" 	,itemTemplate: function(item) {
-        		return $("<button>").attr("type", "button").text("다운").on("click", function btnClick(){	$('#file_idx_modal').val(item);
-        										$('#modalOpenButton').click();
-        		})
-            },width: 20}
+            { headerTemplate:"Package" 	,align:"center" ,name: "package_name"	, type: "text"		,align:"left",  width: 100 },
+            { headerTemplate:"Summary" 	,align:"center" ,name: "summary"		, type: "text"		,align:"left", 	width: 100 },
+            { headerTemplate:"PkgKey" 	,align:"center" ,name: "pkgkey"			, visible: false				 ,  width: 0   },
         ],
-    });
-	
-	
+		rowClick: function(args) {
+//			console.log("low_click >>> "+ $('#searchVal').val + " , " + $('#searchVal').html );
+		    var getData = args.item;
+		    var keys = Object.keys(getData);
+		    var text = [];
+        	$("#pkgkey").val(getData['pkgkey']); // >> 26 으로 넘기고 있음
+			$("#table_type").val($('#searchVal').val());
+        	$('#packageSum_form').submit(); //1. 화면 submit  >> 컨트롤러 goCentOS8DescPage 로이동
+		}
+	});
 }
-
-
 function downloadFiles(){
 	$.ajax({
 	    url: "fileDownChecker",      

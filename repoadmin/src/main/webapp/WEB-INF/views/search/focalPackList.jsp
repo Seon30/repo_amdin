@@ -22,7 +22,7 @@
                     	<li class="breadcrumb-item">
                         	<a href="/">Home</a>
                     	</li>
-                    	<li class="breadcrumb-item active">CentOS7</li>
+                    	<li class="breadcrumb-item active">Focal 20.04</li>
                 	</ol>
             	</div>
         	</div>
@@ -36,24 +36,22 @@
 				<div class="col-md-10" style="float: none; margin: 0 auto;">
 					<div class="card card-primary">
 						<div class="card-header">
-	                        <h3 class="card-title">CentOS 7</h3>
+	                        <h3 class="card-title">Focal 20.04</h3>
 	                    </div>
 						<div class="card-body">
 							<p>찾고자하는 파일 이름을 입력해주세요.</p>
+							<div class="col-sm-10" style="float: none; margin: 0 auto;">
                                 <div class="col-sm-10" style="float: none; margin: 0 auto;">
                                 	<div class="input-group input-group-lg mb-3">
  										<div class="input-group-prepend">              
-											<select type="button" id="searchVal" class="form-control custom-select-lg">
-			                                	<option value="os" selected="selected" >OS</option>
-			                               	 	<option value="plus">Plus</option>
-			                               	 	<option value="extras">Extras</option>	
-			                               	 	<option value="updates">Updates</option>			 	
+											<select type="button" id="searchVal" class="form-control custom-select-lg" hidden="true">
+			                                	<option value="focal" selected="selected" selected="selected"  hidden="true" >focal</option>		 	
 											</select>		
 		                           		</div>
 		                                <input id="search_view_text" name="searchfiles" placeholder="파일 이름을 입력해 주세요." class="form-control">
 	                                    <span class="input-group-append">
 	                                        <button id="searchFile" type="button" class="btn btn-warning btn-flat" onclick="fileSearch3()" >조회</button>
-	                                    </span>		                                
+	                                    </span>			            
                                    	</div>
                                 </div>
 							<div id="jsGrid1"></div>
@@ -113,31 +111,26 @@
 					</div>
 				</div>
 			</div>
+		</div>
     	</div>		
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-10" style="float: none; margin: 0 auto;">					
-					<div class="card card-primary">
+					<div class="card card-primary">	
 						<div class="card-body">
 							<div class="col-12">
 								<div class="card">
 									<div class="card-header d-flex p-0">
-										<h3 class="card-title p-3"><strong>CentOS 7</strong></h3>
-										<ul class="nav nav-pills ml-auto p-2">
-											<li class="nav-item" id="7OS"><a class="nav-link active" href="#OS" data-toggle="tab">OS</a></li>
-											<li class="nav-item" id="7Extras"><a class="nav-link" href="#OS" data-toggle="tab">Extras</a></li>
-											<li class="nav-item" id="7Plus"><a class="nav-link" href="#OS" data-toggle="tab">Plus</a></li>
-											<li class="nav-item" id="7Updates"><a class="nav-link" href="#OS" data-toggle="tab">Updates</a></li>
+<!-- 										<h3 class="card-title p-3"><strong>Focal 20.04</strong></h3> -->
+										<ul class="nav nav-pills ml-auto p-1" hidden="true">
+											<li class="nav-item" id="focal"><a class="nav-link active" href="#OS" data-toggle="tab">Focal 20.04</a></li>
 					                	</ul>
 									</div>
 							        <div class="card-body">
 										<div class="tab-content">
-			                				<div id="osSum"></div>
-			                				<div id="updatesSum"></div>
-							                <div id="plusSum"></div>
-							                <div id="extrasSum"></div>
-						           			<form id="packageSum_form" method="post" action="goCentOS7DescPage" hidden="true">
-							                 	<input id="pkgkey" name="pkgkey"/>
+			                				<div id="focalSum"></div>
+						           			<form id="packageSum_form" method="post" action="goFocalPackDescPage" hidden="true">
+							                 	<input id="idx" name="idx"/>
 							                 	<input id="table_type" name="table_type"/>
 						               		</form>
 							            </div>
@@ -154,7 +147,7 @@
 <!-- /.content-wrapper -->
 
 <%@include file="../include/footer.jsp"%>
-<script src="/resources/js/centOS7.js"></script>
+<script src="/resources/js/focalPackList.js"></script>
 <script src="/resources/plugins/filterizr/jquery.filterizr.min.js"></script>
 <script src="/resources/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
 <script src="/resources/plugins/jquery-ui/jquery-ui.min.js"></script>

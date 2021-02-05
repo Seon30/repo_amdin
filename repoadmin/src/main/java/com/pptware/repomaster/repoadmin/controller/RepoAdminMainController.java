@@ -362,28 +362,27 @@ public class RepoAdminMainController {
 			logger.debug("-------------------------------------------------");
 			return "users/moveLogin";
 		}
-		return "ubuntu/ubuntuVersion";
+		return "search/ubuntuVersion";
 	}
 
-	@RequestMapping("/ubuntuPackList")
-	public String ubuntuPackList(HttpServletRequest request, Model model){
+	@RequestMapping("/focalPackList")
+	public String focalPackList(HttpServletRequest request, Model model){
 		if (!checkSession(request)) {
 			logger.debug("-------------------------------------------------");
 			return "users/moveLogin";
 		}
-		return "ubuntu/ubuntuPackList";
-	}
-
-	@RequestMapping("/ubuntuPackDesc")
-	public String ubuntuPackDesc(HttpServletRequest request, Model model){
-		if (!checkSession(request)) {
-			logger.debug("-------------------------------------------------");
-			return "users/moveLogin";
-		}
-		return "ubuntu/ubuntuPackDesc";
-	}
-
+		return "search/focalPackList";
+	}	
 	
+	@RequestMapping("/focalPackDesc")
+	public String focalPackDesc(HttpServletRequest request, Model model){
+		if (!checkSession(request)) {
+			logger.debug("-------------------------------------------------");
+			return "users/moveLogin";
+		}
+		return "search/focalPackDesc";
+	}	
+		
 	//내정보
 	@RequestMapping(value = "/myInfo", method = RequestMethod.POST)
 	public String myInfo(@RequestParam String emp_no

@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="../include/header.jsp"%>
 <% 
+	//3. 컨트롤러에서 데이터 넘김
 	String pkgkey = (String)request.getAttribute("pkgkey");
 	String table_type = (String)request.getAttribute("table_type");
 	if(pkgkey== null){
@@ -23,7 +24,7 @@
 	<div class="content-header">
     	<div class="container-fluid" style="display: inline-block; margin-left: 0px;">
         	<div class="row mb-2">
-            	<div class="col-sm-6">
+            	<div class="col-sm-6">    	
                 	<h1>PPTware :<small>ReopoMaster</small></h1>
             	</div>
             	<div class="col-sm-6">

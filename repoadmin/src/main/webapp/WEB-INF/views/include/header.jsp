@@ -127,12 +127,6 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="pythonSearch" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Python</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="centOS7" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>CentOS 7</p>
@@ -143,7 +137,25 @@
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>CentOS 8 Stream</p>
                                 </a>
-                            </li>                                                                                                                    
+                            </li>
+                             <li class="nav-item">
+                                <a href="ubuntuVersion" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Ubuntu <small>(packages)</small></p>
+                                </a>
+                            </li>   
+                            <li class="nav-item">
+                                <a href="centOS7" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>R</p>
+                                </a>
+                            </li>                                                                                                                                                                                                         
+                            <li class="nav-item">
+                                <a href="pythonSearch" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Python</p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="userSearch" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
@@ -164,15 +176,7 @@
                                     <p>Windows : Pyhton</p>
                                 </a>
                             </li>                                                     
-                        </ul>
-                        <ul class="nav nav-treeview">
-                             <li class="nav-item">
-                                <a href="ubuntuVersion" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Ubuntu <small>(packages)</small></p>
-                                </a>
-                            </li>                                                       
-                        </ul>                        
+                        </ul>                      
                     </li>
 
                     <li class="nav-item has-treeview">
